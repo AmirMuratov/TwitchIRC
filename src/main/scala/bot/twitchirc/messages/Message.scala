@@ -13,7 +13,6 @@ object Message {
 
   private[twitchirc] case class JoinConfirmation(channel: String) extends Message
   private[twitchirc] case class PartConfirmation(channel: String) extends Message
-  private[twitchirc] case class MessageDeliverConfirmation(channel: String, message: String) extends Message
 
   case class UserJoinedChannel(user: String, channel: String) extends Message
   case class UserLeftChannel(user: String, channel: String) extends Message

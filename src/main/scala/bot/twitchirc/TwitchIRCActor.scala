@@ -34,7 +34,6 @@ class TwitchIRCActor(address: InetSocketAddress, nick: String, oauth: String, pr
   private val messageParser = new MessageParser(nick)
   private var listeners: Set[ActorRef] = Set.empty
 
-  private var sentMessages: Map[(String, String), Cancellable] = Map.empty
   private var joins: Map[String, Cancellable] = Map.empty
   private var parts: Map[String, Cancellable] = Map.empty
   private var channelsToUsers: Map[String, Seq[String]] = Map.empty
@@ -106,9 +105,6 @@ class TwitchIRCActor(address: InetSocketAddress, nick: String, oauth: String, pr
         case PartConfirmation(channel) =>
           parts.get(channel).foreach(_.cancel())
           parts -= channel
-        case MessageDeliverConfirmation(channel, message) =>
-          sentMessages.get((channel, message)).foreach(_.cancel())
-          sentMessages -= ((channel, message))
 
         case ChannelUserList(channel, users) =>
           channelsToUsers += channel -> (users ++ channelsToUsers.getOrElse(channel, Seq()))
@@ -149,10 +145,6 @@ class TwitchIRCActor(address: InetSocketAddress, nick: String, oauth: String, pr
     case SendMessage(name, message) =>
       val channelName = name.toLowerCase
       tcpClientActor ! SendData(s"PRIVMSG $channelName :$message")
-      sentMessages += (channelName, message) -> context.system.scheduler.scheduleOnce(respondTimeout)({
-        log.error(s"Twitch server doesn't respond PRIVMSG $channelName, $message request")
-        parts -= (channelName, message)
-      })
     case SendWhisper(name, message) =>
       val userName = name.toLowerCase
       tcpClientActor ! SendData(s"PRIVMSG #$nick :/w $userName $message")

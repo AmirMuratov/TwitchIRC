@@ -14,7 +14,6 @@ class MessageParser(nick: String) {
   private val pingRegexp = "PING :tmi.twitch.tv".r
   private val successfulJoin = s":$nick!$nick@$nick.tmi.twitch.tv JOIN ($nameTemplate)".r
   private val successfulPart = s":$nick!$nick@$nick.tmi.twitch.tv PART ($nameTemplate)".r
-  private val successfulPrivmsg = s":$nick!$nick@$nick.tmi.twitch.tv PRIVMSG ($nameTemplate) :(.*)".r //should be before incomingChatMessage
 
   //membership
   private val userJoinedChannel = s":($nameTemplate)!$nameTemplate@$nameTemplate.tmi.twitch.tv JOIN ($nameTemplate)".r
@@ -47,7 +46,6 @@ class MessageParser(nick: String) {
       case pingRegexp() => Ping
       case successfulJoin(channel) => JoinConfirmation(channel)
       case successfulPart(channel) => PartConfirmation(channel)
-      case successfulPrivmsg(channel, message) => MessageDeliverConfirmation(channel, message)
 
       case userJoinedChannel(user, channel) => UserJoinedChannel(user, channel)
       case userLeftChannel(user, channel) => UserLeftChannel(user, channel)
