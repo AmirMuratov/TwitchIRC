@@ -121,6 +121,7 @@ class TwitchIRCActor(address: InetSocketAddress, nick: String, oauth: String, pr
                   | UserGainModeMessage(_, _)
                   | UserLostModeMessage(_, _)
                   | IncomingMessage(_, _, _, _)
+                  | IncomingWhisper(_, _, _)
                   | UserBan(_, _, _)
                   | GlobalUserState(_)
                   | RoomState(_, _)
