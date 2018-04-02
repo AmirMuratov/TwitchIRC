@@ -1,7 +1,7 @@
 # Twitch IRC
 Twitch irc implementation on scala using akka actors. Twitch server API described [here](https://dev.twitch.tv/docs/irc)
 ### Usage
-Twitch bot is an actor which sends messages about all events to its listeners.
+Twitch bot is an actor which sends messages about all events to it's listeners.
 ### Messages that can be sent to TwitchIRCActor
 * ```Join(channelName: String)```
 * ```Part(channelName: String)```
@@ -39,7 +39,7 @@ sent only if ```commands``` is enabled:
 * ```UserNotice(tags: Map[String, String], channel: String, message: String)```
 * ```UserState(tags: Map[String, String], channel: String)```
 
-### Creating example
+### Usage example
 Code inside actor:
 ```
 import bot.twitchirc.TwitchIRCActor
@@ -49,9 +49,17 @@ val twitchIRCActor = context.actorOf(TwitchIRCActor.props(nick, oauth,
     props = TwitchIRCProps(membership = true, tags = true, commands = true)), "TwitchIRCActor")
   twitchIRCActor ! AddListener(self)
 ```
+
 ```nick``` - twitch login
+
 ```oauth``` - can be obtained [here](https://twitchapps.com/tmi/)
 ### TwitchIRCProps - case class with properties:
 * membership - server send information about users join/left. Described [here](https://dev.twitch.tv/docs/irc#twitch-irc-capability-membership).
 * tags - additional information about users/events in messages. Described [here](https://dev.twitch.tv/docs/irc#twitch-irc-capability-tags).
 * commands - adds additional commands. Described [here](https://dev.twitch.tv/docs/irc#twitch-irc-capability-commands).
+
+### Add to sbt
+```
+resolvers += "jitpack" at "https://jitpack.io"
+libraryDependencies += "com.github.AmirMuratov" % "TwitchIRC" % "0.1"
+```

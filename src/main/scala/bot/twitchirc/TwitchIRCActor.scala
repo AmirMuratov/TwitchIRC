@@ -174,6 +174,7 @@ object TwitchIRCActor {
 
   sealed trait BotType
   case object KnownBot extends BotType
+  case object Verified extends BotType
 
   private val defaultAddress = new InetSocketAddress("irc.chat.twitch.tv", 6667)
 

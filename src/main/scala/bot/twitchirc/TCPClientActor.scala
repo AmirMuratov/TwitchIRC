@@ -10,7 +10,7 @@ import bot.twitchirc.TCPClientActor.{CloseConnection, DataReceived, SendData, Wr
 /**
   * Created by amir.
   */
-class TCPClientActor(remote: InetSocketAddress) extends Actor with ActorLogging {
+private[twitchirc] class TCPClientActor(remote: InetSocketAddress) extends Actor with ActorLogging {
 
   import Tcp._
   import context.system
@@ -61,19 +61,16 @@ object TCPClientActor {
   def props(remote: InetSocketAddress) =
     Props(classOf[TCPClientActor], remote)
 
-  //send result of connecting to parent
   case object Connected
 
   case class ConnectionFailed(message: String)
 
-  //messages sent to listener on events
-  case class DataReceived(data: String)
+  private[twitchirc] case class DataReceived(data: String)
 
-  case class WriteFailed(data: String)
+  private[twitchirc] case class WriteFailed(data: String)
 
-  //messages that can be sent
-  case class SendData(data: String)
+  private[twitchirc] case class SendData(data: String)
 
-  case object CloseConnection
+  private[twitchirc] case object CloseConnection
 
 }

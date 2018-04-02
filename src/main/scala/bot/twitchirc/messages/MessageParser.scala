@@ -76,7 +76,6 @@ class MessageParser(nick: String) {
     users.split(" ")
   }
 
-  //@ban-duration=<ban-duration>;ban-reason=<ban-reason>
   private def parseTags(tags: String): Map[String, String] = {
     tags.tail split ";" map { tag =>
       val parsedTag = tag.split("=", -1)
